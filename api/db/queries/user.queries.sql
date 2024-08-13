@@ -1,3 +1,7 @@
 -- name: GetUser :one
 SELECT * FROM users
-WHERE id = ? LIMIT 1;
+WHERE id = ?;
+
+-- name: CreateUser :execresult
+INSERT INTO users (name, email, password) 
+VALUES (?, ?, ?);
