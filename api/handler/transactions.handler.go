@@ -55,9 +55,11 @@ func (app *Application) TransactionsList(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	resp, _ := json.Marshal(transactions)
 	fmt.Printf("transactions: %+v\n", transactions)
 
-	w.Write([]byte("ok"))
+	w.Header().Set("content-type", "application/json")
+	w.Write(resp)
 }
 
 func (app *Application) TransactionsCreate(w http.ResponseWriter, r *http.Request) {
@@ -77,12 +79,12 @@ func (app *Application) TransactionsCreate(w http.ResponseWriter, r *http.Reques
 
 	t := Transaction{}
 
-	fmt.Printf("hi 1\n")
+	// fmt.Printf("hi 1\n")
 	if err := json.NewDecoder(r.Body).Decode(&t); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	fmt.Printf("hi 2\n")
+	// fmt.Printf("hi 2\n")
 	deskripsi := sql.NullString{}
 
 	accounts, err := queries.GetAccounts(r.Context(), sqlcdb.GetAccountsParams{
@@ -113,7 +115,7 @@ func (app *Application) TransactionsCreate(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	fmt.Printf("hi 3\n")
+	// fmt.Printf("hi 3\n")
 	qtx := queries.WithTx(tx)
 
 	category, err := qtx.GetCategory(r.Context(), t.CategoryId)
@@ -124,12 +126,8 @@ func (app *Application) TransactionsCreate(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var tipe string
-
-	category.Tipe.Scan(&tipe)
-
-	fmt.Printf("category: %+v\n", category)
-	fmt.Printf("tipe: %s\n", tipe)
+	// fmt.Printf("category: %+v\n", category)
+	// fmt.Printf("tipe: %s\n", tipe)
 
 	if category.Tipe == "pemasukan" {
 		err = qtx.Deposit(r.Context(), sqlcdb.DepositParams{
@@ -143,14 +141,14 @@ func (app *Application) TransactionsCreate(w http.ResponseWriter, r *http.Reques
 		})
 	}
 
-	fmt.Printf("hi 4\n")
+	// fmt.Printf("hi 4\n")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		tx.Rollback()
 		return
 	}
 
-	fmt.Printf("hi 5\n")
+	// fmt.Printf("hi 5\n")
 	transaction, err := qtx.CreateTransaction(context.Background(), sqlcdb.CreateTransactionParams{
 		Nominal:    t.Nominal,
 		KategoriID: t.CategoryId,
@@ -159,17 +157,17 @@ func (app *Application) TransactionsCreate(w http.ResponseWriter, r *http.Reques
 		RekID:      rekId,
 	})
 
-	fmt.Printf("hi 6\n")
+	// fmt.Printf("hi 6\n")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		tx.Rollback()
 		return
 	}
 
-	fmt.Printf("hi 7\n")
+	// fmt.Printf("hi 7\n")
 	tx.Commit()
 
-	fmt.Printf("hi 8\n")
+	// fmt.Printf("hi 8\n")
 	fmt.Printf("\ntransaction: %+v\n", transaction)
 
 	w.Write([]byte("ok"))

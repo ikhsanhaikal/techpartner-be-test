@@ -1,0 +1,22 @@
+POST http://localhost:5555/users/3/accounts/3/transactions HTTP/1.1
+Authorization: Bearer xxx
+content-type: application/json
+
+{
+    "deskripsi": "byr kos bulan depan",
+    "nominal": "1750000",
+		"kategori": 4
+}
+
+###
+GET http://localhost:5555/categories
+Authorization: Bearer xxx 
+content-type: application/json
+
+###
+POST http://localhost:5555/login HTTP/1.1
+
+{
+	"email": "budi@mail.com",
+	"password": "passwordnyabudi"
+}
