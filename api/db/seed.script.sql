@@ -4,6 +4,12 @@ VALUES
   ('Agus', 'agus@mail.com', 'passwordnyaagus'), 
   ('Ani', 'ani@mail.com', 'passwordnyaani');
 
+INSERT INTO accounts (saldo, user_id) 
+VALUES 
+  (5000000, 1), 
+  (3500000, 2), 
+  (10000000, 3);
+
 
 INSERT INTO categories (nama, tipe) 
 VALUES 
@@ -14,13 +20,17 @@ VALUES
   ('makan', 'pengeluaran'),
   ('pakaian', 'pengeluaran');
 
+UPDATE accounts
+SET saldo = saldo - 350000
+WHERE id = 1;
 
-INSERT INTO transactions (user_id, kategori_id,
+UPDATE accounts
+SET saldo = saldo - 1500000
+WHERE id = 3;
+
+INSERT INTO transactions (user_id, rek_id, kategori_id,
 nominal, deskripsi) 
 VALUES 
-  (1, 1, 5000000, ""), 
-  (1, 6, 3500000, "kemeja uniqlo promo"), 
-  (2, 1, 6000000, ""),
-  (3, 1, 5500000, ""),
-  (3, 4, 1500000, "byr kost bulan kemarin");
+  (1, 1, 6, 350000, "kemeja uniqlo promo"), 
+  (3, 3, 4, 1500000, "byr kost bulan kemarin");
 

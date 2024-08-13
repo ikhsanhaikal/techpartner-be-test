@@ -12,9 +12,9 @@ SELECT * FROM transactions
 WHERE created_at BETWEEN ? AND ? AND user_id = ?; 
 
 -- name: CreateTransaction :execresult
-INSERT INTO transactions (user_id, kategori_id,
+INSERT INTO transactions (user_id, rek_id, kategori_id,
 nominal, deskripsi) 
-VALUES (?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?);
 
 -- name: DeleteTransaction :exec
 DELETE FROM transactions WHERE id = ?;
