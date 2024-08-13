@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("mysql", "root:password@tcp(localhost:55000)/technopartner")
+	db, err := sql.Open("mysql", "root:password@tcp(localhost:55000)/technopartner?parseTime=true")
 
 	app := handler.Application{
 		DB: db,
@@ -28,8 +28,9 @@ func main() {
 	r.Post("/categories", app.CategoriesCreate)
 	r.Delete("/categories/{id}", app.CategoriesDelete)
 
-	// r.Get("/users/{id}/transactions", app.CategoriesCreate)
-	// r.Post("/users/{id}/transactions", app.CategoriesCreate)
+	r.Get("/users/{id}/transactions", app.TransactionsList)
+	r.Post("/users/{id}/transactions", app.TransactionsCreate)
+	r.Delete("/users/{id}/transactions/{transactionId}", app.TransactionsDelete)
 
 	http.ListenAndServe(":5555", r)
 }
